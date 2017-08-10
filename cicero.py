@@ -18,8 +18,8 @@ class Cicero:
         self.monitor_for_posts()
 
     def monitor_for_posts(self):
-        message_template = 'New post in SOTS!\n' \
-                           'Title: {}\n' \
+        message_template = 'New post in SOTS!\n\n' \
+                           'Title: <b>{}</b>\n\n' \
                            'Link: {}'
         url_header = 'https://reddit.com{}'
 
@@ -29,7 +29,7 @@ class Cicero:
                 announcement = message_template.format(submission.title, submission.url)
                 permalink = url_header.format(submission.permalink)
                 if permalink != submission.url:
-                    announcement += '\n{}'.format(permalink)
+                    announcement += '\n\n{}'.format(permalink)
                 self.announcer.announce(announcement)
 
     def save_last_date(self, new_date):

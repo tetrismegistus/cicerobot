@@ -32,4 +32,4 @@ class Announcer:
 
     def announce(self, message):
         for chat_id in self.chat_ids:
-            self.bot.sendMessage(chat_id, message)
+            self.bot.sendMessage(chat_id, message,parse_mode='HTML')
