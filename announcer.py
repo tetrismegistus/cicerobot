@@ -35,6 +35,15 @@ class Announcer:
         self.chat_ids.append(chat_id)
         save_pickle(self.chat_ids, self.chat_ids_file)
 
-    def announce(self, message):
+    def remove_chat_id(self, chat_id):
+        self.chat_ids.remove(chat_id)
+        save_pickle(self.chat_ids, self.chat_ids_file)
+
+    def announce(self, message):        
         for chat_id in self.chat_ids:
-            self.bot.sendMessage(chat_id, message,parse_mode='Markdown')
+            try:
+                self.bot.sendMessage(chat_id, message,parse_mode='Markdown')
+            except telepot.exception.BotWasBlockedError as e:
+                print('removing chat_id {}, bot was blocked'.format(chat_id))
+                self.remove_chat_id(chat_id)
+
