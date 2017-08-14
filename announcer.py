@@ -43,7 +43,8 @@ class Announcer:
         for chat_id in self.chat_ids:
             try:
                 self.bot.sendMessage(chat_id, message,parse_mode='Markdown')
-            except telepot.exception.BotWasBlockedError as e:
-                print('removing chat_id {}, bot was blocked'.format(chat_id))
+            except (telepot.exception.BotWasBlockedError,
+                    telepot.exception.BotWasKickedError ) as e:
+                print('removing chat_id {}, bot was kicked or blocked'.format(chat_id))
                 self.remove_chat_id(chat_id)
 
