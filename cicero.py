@@ -2,7 +2,7 @@ import datetime
 import logging
 
 import praw
-ipmort prawcore
+import prawcore
 
 from announcer import Announcer
 from saveload import load_pickle, save_pickle
