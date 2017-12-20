@@ -6,11 +6,13 @@ def setup_logger(filename):
     rootLogger = logging.getLogger()
     rootLogger.setLevel(logging.INFO)
 
-    fileHandler = logging.FileHandler('{}.log'.format(filename))
+    fileHandler = logging.FileHandler('{}.log'.format(filename),'w')
     fileHandler.setFormatter(logFormatter)
+    fileHandler.setLevel(logging.INFO)
     rootLogger.addHandler(fileHandler)
     
     consoleHandler = logging.StreamHandler()
     consoleHandler.setFormatter(logFormatter)
+    consoleHandler.setLevel(logging.INFO)
     rootLogger.addHandler(consoleHandler)
 

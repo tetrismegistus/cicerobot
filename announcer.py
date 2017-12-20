@@ -34,7 +34,6 @@ class Announcer:
         return token
 
     def check_chat_id(self, message):
-        logging.info('received message: {}'.format(message))
         content_type, chat_type, chat_id = telepot.glance(message)
         if chat_id not in self.chat_ids:
             self.add_chat_id(chat_id)
@@ -52,20 +51,21 @@ class Announcer:
 
     def announce(self, message):        
         for chat_id in self.chat_ids:
-            chat = self.bot.getChat(chat_id)
-            name = ''
-            
-            if chat['type'] == 'group':
-                name = 'group {}.'.format(chat.get('title'))
-            else:
-                name = 'user {}.'.format(chat.get('username'))
-            
-            logging.info('Announcing {}'.format(message))            
+            logging.info('Announcing {}'.format(message))
             try:
                 self.bot.sendMessage(chat_id, message,parse_mode='Markdown')
-                logging.info('Announced to chat_id {0}, {1}'.format(chat_id, name))
+                logging.info('Announced to chat_id {}'.format(chat_id))
             except (telepot.exception.BotWasBlockedError,
                     telepot.exception.BotWasKickedError ) as e:
-                logging.warning('Bot was kicked or blocked by {0}, {1}'.format(chat_id, name))
+                logging.warning('Bot was kicked or blocked from {}'.format(chat_id))
                 self.remove_chat_id(chat_id)
+            except telepot.exception.TelegramError as e:
+                logging.warning('Could not announce to {}: {}'.format(chat_id, e))
+                logging.warning('I think this means I can no longer send to this chat id')
+                self.remove_chat_id(chat_id)
+
+
+
+
+
 

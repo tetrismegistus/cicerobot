@@ -2,6 +2,7 @@ import datetime
 import logging
 
 import praw
+ipmort prawcore
 
 from announcer import Announcer
 from saveload import load_pickle, save_pickle
@@ -31,14 +32,17 @@ class Cicero:
         
         logging.info('Monitoring subreddit for new posts')
 
-        for submission in self.subreddit.stream.submissions():
-            if submission.created > self.date:
-                self.save_last_date(submission.created)
-                announcement = message_template.format(submission.title, submission.url)
-                permalink = url_header.format(submission.permalink)
-                if permalink != submission.url:
-                    announcement += '\n[comments]({})'.format(permalink)
-                self.announcer.announce(announcement)
+        try:
+            for submission in self.subreddit.stream.submissions():
+                if submission.created > self.date:
+                    self.save_last_date(submission.created)
+                    announcement = message_template.format(submission.title, submission.url)
+                    permalink = url_header.format(submission.permalink)
+                    if permalink != submission.url:
+                        announcement += '\n[comments]({})'.format(permalink)
+                    self.announcer.announce(announcement)
+        except PrawcoreException as e: 
+            logging.error('Error: {}'.format(e))    
 
     def save_last_date(self, new_date):
         self.date = new_date
